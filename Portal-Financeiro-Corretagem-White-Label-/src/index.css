@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Default Brand Color (Blue-500 equivalent) */
+  --color-brand-50: 240 249 255;
+  --color-brand-100: 224 242 254;
+  --color-brand-200: 186 230 253;
+  --color-brand-300: 125 211 252;
+  --color-brand-400: 56 189 248;
+  --color-brand-500: 14 165 233;
+  --color-brand-600: 2 132 199;
+  --color-brand-700: 3 105 161;
+  --color-brand-800: 7 89 133;
+  --color-brand-900: 12 74 110;
+  --color-brand-950: 8 47 73;
+
+  /* Default Secondary Color (Slate-500 equivalent) */
+  --color-secondary-50: 248 250 252;
+  --color-secondary-100: 241 245 249;
+  --color-secondary-200: 226 232 240;
+  --color-secondary-300: 203 213 225;
+  --color-secondary-400: 148 163 184;
+  --color-secondary-500: 100 116 139;
+  --color-secondary-600: 71 85 105;
+  --color-secondary-700: 51 65 85;
+  --color-secondary-800: 30 41 59;
+  --color-secondary-900: 15 23 42;
+  --color-secondary-950: 2 6 23;
+}
+
+@layer base {
+  :root {
+    --bg-card: rgba(255, 255, 255, 0.8);
+  }
+  
+  .dark {
+    --bg-card: rgba(31, 41, 55, 0.9);
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900 dark:bg-[#0B0F19] dark:text-gray-100 font-sans;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-gray-900 dark:text-white;
+  }
+}
+
+/* Glassmorphism Utilities */
+.glass {
+  @apply bg-white/80 dark:bg-[#111827]/80 backdrop-blur-lg border border-white/20 dark:border-white/10 shadow-xl;
+}
+
+.glass-card {
+  @apply bg-white/60 dark:bg-[#1F2937]/60 backdrop-blur-md border border-gray-200/60 dark:border-gray-700/60 shadow-lg rounded-xl;
+}
