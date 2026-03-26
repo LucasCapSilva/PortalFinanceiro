@@ -1,16 +1,33 @@
-# Portal Financeiro - Corretagem White Label
+# 📈 Portal Financeiro - Corretagem White Label
 
-Bem-vindo ao repositório do **Portal Financeiro**, uma plataforma completa de corretagem digital em formato White Label. Este projeto engloba uma arquitetura moderna e escalável dividida entre um backend robusto (NestJS) e um frontend interativo e performático (React + Vite).
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
+![React](https://img.shields.io/badge/React-18.x-61DAFB?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?logo=vite&logoColor=white)
+![NestJS](https://img.shields.io/badge/NestJS-10.x-E0234E?logo=nestjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)
+
+Uma plataforma completa e moderna de corretagem digital em formato White Label. Este projeto oferece dashboards interativos para visualização de ativos, carteiras de investimento e operações financeiras, integrando um frontend altamente responsivo com uma API backend robusta e escalável.
+
+## 📋 Índice
+
+- [Arquitetura Técnica](#-arquitetura-técnica)
+- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
+- [Pré-requisitos](#-pré-requisitos)
+- [Instalação e Configuração](#-instalação-e-configuração)
+- [Ambiente de Desenvolvimento](#-ambiente-de-desenvolvimento)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [Documentação da API](#-documentação-da-api)
+- [Licença](#-licença)
 
 ---
 
-## 🏗️ Arquitetura do Projeto
+## 🏗 Arquitetura Técnica
 
-O projeto foi concebido seguindo princípios de **Domain-Driven Design (DDD)** e arquitetura em camadas para garantir manutenibilidade, separação de responsabilidades e escalabilidade.
+O projeto foi concebido seguindo princípios de **Domain-Driven Design (DDD)** e arquitetura em camadas (Clean Architecture) para garantir manutenibilidade, separação de responsabilidades e escalabilidade, orquestrada via Docker.
 
-### Fluxograma da Arquitetura
-
-Abaixo está o diagrama ilustrando a comunicação entre os serviços e a estrutura interna da aplicação:
+### Diagrama de Componentes
 
 ```mermaid
 graph TD
@@ -41,107 +58,138 @@ graph TD
     class MySQL db;
 ```
 
-### **Backend (NestJS)**
-A API do servidor foi desenvolvida com [NestJS](https://nestjs.com/) e TypeScript. Ela se comunica com um banco de dados **MySQL** usando o ORM **TypeORM**.
-- **Camada de Apresentação (Controllers)**: Recebe requisições HTTP e valida dados usando `class-validator`.
-- **Camada de Aplicação (Services / CQRS)**: Executa a lógica de negócios e orquestra o fluxo de dados. O módulo de ordens (Orders) implementa ativamente o padrão CQRS (Command Query Responsibility Segregation) separando fluxos de leitura e gravação.
-- **Camada de Infraestrutura (Entities / Repositories)**: Define o esquema do banco de dados (MySQL) e isola o acesso a dados.
-- **Autenticação**: Baseada em **JWT (JSON Web Tokens)** e Passport.js para controle de acesso seguro aos endpoints.
-- **Seeding Automático**: O backend detecta na inicialização se o banco está vazio e automaticamente o popula com mocks iniciais de ações (Stocks), índices, carteiras de usuários e ordens.
-- **Documentação da API**: Gerada automaticamente pelo Swagger. Pode ser acessada em `/api/docs`.
+---
 
-### **Frontend (React + Vite)**
-A interface do usuário foi construída usando **React**, empacotada com **Vite** para máxima velocidade de desenvolvimento.
-- **Estilização**: Tailwind CSS com suporte a Dark/Light Mode dinâmico.
-- **Gerenciamento de Estado**: Zustang para configurações globais de tema e Contextos.
-- **Gráficos e Dados**: Utiliza a biblioteca **Recharts** para desenhar os gráficos em tempo real da performance dos ativos (IBOV, Ações).
-- **Integração com API**: Utiliza **Axios** com interceptors para injeção automática do token JWT nas requisições seguras.
+## 💻 Tecnologias Utilizadas
+
+### Frontend
+| Tecnologia | Versão | Descrição |
+|------------|--------|-----------|
+| **React** | 18.x | Biblioteca para construção de interfaces |
+| **Vite** | 5.x | Ferramenta de build super rápida |
+| **TypeScript** | 5.x | Tipagem estática para JavaScript |
+| **Tailwind CSS** | 3.x | Framework de CSS utilitário |
+| **Lucide React** | ^0.x | Biblioteca de ícones |
+| **Zustand** | ^4.x | Gerenciamento de estado global |
+| **Recharts** | ^2.x | Gráficos financeiros interativos |
+
+### Backend
+| Tecnologia | Versão | Descrição |
+|------------|--------|-----------|
+| **Node.js** | 20.x | Ambiente de execução JavaScript |
+| **NestJS** | 10.x | Framework principal e Clean Architecture |
+| **TypeScript** | 5.x | Linguagem de programação |
+| **Passport.js** | - | Autenticação e autorização (JWT) |
+| **TypeORM** | - | Persistência de dados e ORM |
+| **CQRS** | - | Separação de comandos e consultas |
+
+### Infraestrutura & Banco de Dados
+| Tecnologia | Versão | Descrição |
+|------------|--------|-----------|
+| **MySQL** | 8.0 | Banco de dados relacional |
+| **Docker** | Latest | Containerização da aplicação |
+| **Docker Compose**| Latest | Orquestração de containers |
+| **Nginx** | Alpine | Servidor web para o frontend |
 
 ---
 
-## 🐳 Executando com Docker (Recomendado)
+## ⚙️ Pré-requisitos
 
-O projeto está totalmente conteinerizado, garantindo que rode de forma idêntica em qualquer ambiente (Produção ou Desenvolvimento). O `docker-compose.yml` raiz orquestra os 3 serviços:
-1. **db**: Banco de dados MySQL 8.0.
-2. **backend**: Aplicação NestJS exposta na porta `3001`.
-3. **frontend**: Aplicação SPA React servida através do Nginx na porta `80`.
-
-### Pré-requisitos
-- Docker
-- Docker Compose
-
-### Passos para inicializar
-
-Na raiz do projeto (onde se encontra o arquivo `docker-compose.yml`), execute:
-
-```bash
-docker-compose up --build -d
-```
-
-Este comando fará o build das imagens (Backend e Frontend) e iniciará os containers.
-
-### Acessando os Serviços
-- **Frontend (Interface Web)**: Acesse `http://localhost` no seu navegador.
-- **Backend (API)**: Acesse `http://localhost:3001`.
-- **Documentação da API (Swagger)**: Acesse `http://localhost:3001/api/docs`.
-
-> **Nota sobre o Banco de Dados**: Na primeira vez que o backend subir com sucesso conectado ao banco de dados, o `SeederService` irá rodar automaticamente e injetar todos os dados de ações, índices e usuários. O usuário de demonstração padrão é `admin@portal.com` com senha `admin123`.
+Para executar o projeto localmente, você precisará ter instalado:
+- [Docker](https://docs.docker.com/get-docker/) e [Docker Compose](https://docs.docker.com/compose/install/)
+- [Node.js](https://nodejs.org/) (v20+) - *Para desenvolvimento local*
 
 ---
 
-## 💻 Executando Localmente (Sem Docker)
+## 🚀 Instalação e Configuração
 
-Caso prefira rodar os serviços localmente para desenvolvimento:
+A maneira mais fácil e recomendada de executar a aplicação completa é usando Docker.
 
-### 1. Iniciar o Banco de Dados
-Acesse a pasta do backend e inicie apenas o container do MySQL:
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/seu-usuario/portal-financeiro.git
+   cd portal-financeiro
+   ```
+
+2. **Suba os containers usando o Docker Compose:**
+   ```bash
+   docker-compose up -d --build
+   ```
+
+3. **Acesse as aplicações:**
+   - **Frontend:** [http://localhost](http://localhost)
+   - **Backend API:** [http://localhost:3001](http://localhost:3001)
+   - **Swagger UI (Docs da API):** [http://localhost:3001/api/docs](http://localhost:3001/api/docs)
+
+   > **Nota sobre o Banco de Dados**: Na primeira vez que o backend subir com sucesso, o `SeederService` irá rodar automaticamente e injetar dados iniciais de demonstração (Ações, Índices e Usuários). O usuário padrão é `admin@portal.com` com a senha `admin123`.
+
+4. **Para parar os containers:**
+   ```bash
+   docker-compose down
+   ```
+
+---
+
+## � Ambiente de Desenvolvimento
+
+Se você deseja rodar as aplicações sem Docker para desenvolvimento:
+
+### Backend (NestJS)
 ```bash
 cd backend
-docker-compose up -d
-```
+# Inicie o banco de dados via Docker:
+docker-compose up -d db
 
-### 2. Iniciar o Backend
-```bash
-cd backend
+# Instale as dependências e inicie a aplicação
 npm install
 npm run start:dev
 ```
 O servidor estará rodando em `http://localhost:3001`.
 
-### 3. Iniciar o Frontend
-Em um novo terminal:
+### Frontend (React + Vite)
 ```bash
 cd Portal-Financeiro-Corretagem-White-Label-
+# Instale as dependências
 npm install
+
+# Inicie o servidor de desenvolvimento
 npm run dev
 ```
-O frontend estará acessível em `http://localhost:5173`.
+O frontend estará disponível em `http://localhost:5173`.
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## � Estrutura do Projeto
 
-**Backend:**
-- Node.js & NestJS
-- TypeScript
-- MySQL & TypeORM
-- CQRS (@nestjs/cqrs)
-- JWT (Passport.js)
-- Swagger (OpenAPI)
-
-**Frontend:**
-- React 18 & Vite
-- Tailwind CSS
-- Framer Motion (Animações)
-- Recharts (Gráficos Financeiros)
-- Axios
-- Lucide React (Ícones)
-- date-fns (Manipulação de Datas)
-
-**Infraestrutura:**
-- Docker
-- Docker Compose
-- Nginx (Servidor Web do Frontend)
+```text
+PortalFinanceiro/
+├── docker-compose.yml       # Orquestração dos containers (DB, Backend, Frontend)
+├── backend/                 # Aplicação NestJS API
+│   ├── src/                 # Código fonte do Backend
+│   │   ├── modules/         # Domínios: auth, market, orders, portfolio, users
+│   │   └── shared/          # Recursos compartilhados
+│   ├── Dockerfile           # Configuração de build Multi-stage do Backend
+│   └── package.json         # Dependências do NPM
+└── Portal-Financeiro-Corretagem-White-Label-/ # Aplicação React + Vite
+    ├── src/                 # Código fonte Frontend
+    │   ├── components/      # Componentes UI reutilizáveis e Layout
+    │   ├── pages/           # Telas principais da aplicação
+    │   ├── services/        # Integração com API
+    │   └── store/           # Gerenciamento de estado (Zustand)
+    ├── Dockerfile           # Configuração de build Multi-stage (Node -> Nginx)
+    ├── nginx.conf           # Configuração do Nginx para roteamento SPA
+    └── package.json         # Dependências do NPM
+```
 
 ---
-*Projeto desenvolvido para demonstração de arquitetura escalável e Domain-Driven Design no setor de Finanças.*
+
+## 📖 Documentação da API
+
+A documentação interativa da API é gerada automaticamente pelo **Swagger**. 
+Com o backend rodando, acesse `http://localhost:3001/api/docs` no seu navegador para visualizar, explorar e testar os endpoints disponíveis na plataforma.
+
+---
+
+## 📄 Licença
+
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
